@@ -1,135 +1,63 @@
 import time
 from datetime import datetime, timedelta, timezone
 import pandas as pd
-import requests
 import yfinance as yf
+from curl_cffi import requests
 
 IST = timezone(timedelta(hours=5, minutes=30))
 now_ist = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
 
-session = requests.Session()
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Referer": "https://bseindia.com",
-    "Origin": "https://www.bseindia.com",
-}
-
+session = requests.Session(impersonate="chrome124")
 raw_rows = []
 source_used = "BSE 52W High API"
 
-# 1. Try BSE 52-Week High API safely (never crash on HTML response)
+# 1. Try BSE 52W High API with Chrome TLS fingerprint + cookie warmup
 try:
-    session.get("https://bseindia.com", headers=headers, timeout=15)
+    session.get("https://bseindia.com", timeout=15)
     resp = session.get(
         "https://bseindia.com",
-        params={"Grpcode": "", "Type": "H"},
-        headers=headers,
+        headers={"Referer": "https://bseindia.com", "Origin": "https://bseindia.com"},
         timeout=20,
     )
     if resp.status_code == 200 and resp.text.lstrip().startswith("{"):
         raw_rows = resp.json().get("Table", [])
-    else:
-        print(f"BSE returned non-JSON (status {resp.status_code}), switching to NSE/Yahoo fallback...")
 except Exception as e:
-    print(f"BSE fetch skipped: {e}")
+    print(f"BSE warning: {e}")
 
-# 2. Fallback A: NSE 52-Week High API
-if not raw_rows:
-    source_used = "NSE 52W High API"
-    nse_headers = {
-        "User-Agent": headers["User-Agent"],
-        "Accept": "*/*",
-        "Referer": "https://nseindia.com",
-    }
-    try:
-        session.get("https://nseindia.com", headers=nse_headers, timeout=15)
-        nse_resp = session.get("https://nseindia.com", headers=nse_headers, timeout=20)
-        if nse_resp.status_code == 200 and nse_resp.text.lstrip().startswith("{"):
-            for item in nse_resp.json().get("data", []):
-                raw_rows.append({
-                    "SCRIP_CD": "",
-                    "scrip_id": item.get("symbol", ""),
-                    "scripname": item.get("companyName", item.get("symbol", "")),
-                    "ltradert": item.get("ltp") or item.get("lastPrice") or 0,
-                    "New52WH": item.get("new52WHL") or item.get("ltp") or 0,
-                    "change_percent": item.get("pChange") or 0,
-                })
-    except Exception as e:
-        print(f"NSE fetch skipped: {e}")
-
-# 3. Fallback B: Yahoo Finance Screener (Works 100% from GitHub Cloud IPs & Weekends)
+# 2. Fallback: Authenticated yfinance EquityQuery screener (works 24/7 including holidays)
 if not raw_rows:
     source_used = "Yahoo Finance India Near-52W High Screener"
     try:
-        yf_url = "https://yahoo.com"
-        payload = {
-            "size": 150,
-            "offset": 0,
-            "sortField": "percentchange",
-            "sortType": "DESC",
-            "quoteType": "EQUITY",
-            "query": {
-                "operator": "AND",
-                "operands": [
-                    {"operator": "eq", "operands": ["region", "in"]},
-                    {"operator": "gt", "operands": ["intradaymarketcap", 5000000000]},
-                    {"operator": "lt", "operands": ["intradaymarketcap", 200000000000]},
-                ],
-            },
-        }
-        yf_resp = requests.post(yf_url, json=payload, headers={"User-Agent": headers["User-Agent"]}, timeout=20)
-        if yf_resp.status_code == 200 and yf_resp.text.lstrip().startswith("{"):
-            quotes = yf_resp.json().get("finance", {}).get("result", [{}])[0].get("quotes", [])
-            for q in quotes:
-                ltp = float(q.get("regularMarketPrice") or 0)
-                high_52w = float(q.get("fiftyTwoWeekHigh") or 0)
-                if ltp > 0 and high_52w > 0 and ltp >= 0.88 * high_52w:
-                    raw_rows.append({
-                        "SCRIP_CD": "",
-                        "scrip_id": q.get("symbol", "").replace(".NS", "").replace(".BO", ""),
-                        "scripname": q.get("shortName") or q.get("longName") or q.get("symbol", ""),
-                        "ltradert": ltp,
-                        "New52WH": high_52w,
-                        "change_percent": float(q.get("regularMarketChangePercent") or 0),
-                    })
+        q = yf.EquityQuery("and", [
+            yf.EquityQuery("eq", ["region", "in"]),
+            yf.EquityQuery("gt", ["intradaymarketcap", 5000000000]),
+            yf.EquityQuery("lt", ["intradaymarketcap", 200000000000]),
+            yf.EquityQuery("gt", ["percentchange", 1.5]),
+        ])
+        res = yf.screen(q, sortField="percentchange", sortAsc=False, size=200)
+        for item in res.get("quotes", []):
+            ltp = float(item.get("regularMarketPrice") or 0)
+            high_52w = float(item.get("fiftyTwoWeekHigh") or 0)
+            if ltp > 0 and high_52w > 0 and ltp >= 0.88 * high_52w:
+                raw_rows.append({
+                    "scrip_id": item.get("symbol", "").replace(".NS", "").replace(".BO", ""),
+                    "scripname": item.get("shortName") or item.get("longName") or item.get("symbol", ""),
+                    "ltradert": ltp,
+                    "New52WH": high_52w,
+                    "change_percent": float(item.get("regularMarketChangePercent") or 0),
+                })
     except Exception as e:
-        print(f"Yahoo screener skipped: {e}")
-
-# 4. Map BSE Scrip Codes -> Face Value = 10 (only if BSE source succeeded)
-scrip_map = {}
-if source_used.startswith("BSE"):
-    try:
-        scrip_resp = session.get(
-            "https://bseindia.com",
-            params={"Group": "", "Scripcode": "", "industry": "", "segment": "Equity", "status": "Active"},
-            headers=headers,
-            timeout=25,
-        )
-        if scrip_resp.status_code == 200 and scrip_resp.text.lstrip().startswith("["):
-            for item in scrip_resp.json():
-                code = str(item.get("SCRIP_CD", "")).strip()
-                scrip_map[code] = {
-                    "symbol": str(item.get("scrip_id", "")).strip(),
-                    "face_value": float(item.get("FACE_VALUE") or 0),
-                }
-    except Exception as e:
-        print(f"Scrip master skipped: {e}")
+        print(f"Yahoo yf.screen warning: {e}")
 
 qualified = []
 all_52w_summary = []
 
 for row in raw_rows:
-    code = str(row.get("SCRIP_CD", "")).strip()
-    name = str(row.get("scripname", "")).strip()
+    symbol = str(row.get("scrip_id") or "").strip()
+    name = str(row.get("scripname") or symbol).strip()
     ltp = float(row.get("ltradert") or 0)
     high_52w = float(row.get("New52WH") or ltp)
     pct_1d = float(row.get("change_percent") or 0)
-
-    meta = scrip_map.get(code, {})
-    symbol = str(row.get("scrip_id") or meta.get("symbol") or "").strip()
-    fv = meta.get("face_value", 10.0)
 
     all_52w_summary.append({
         "Symbol": symbol or name,
@@ -137,10 +65,9 @@ for row in raw_rows:
         "LTP": round(ltp, 2),
         "52W_High": round(high_52w, 2),
         "1D_%": round(pct_1d, 2),
-        "FV": fv,
     })
 
-    if fv != 10.0 or pct_1d <= 4.5 or ltp < 0.88 * high_52w or not symbol:
+    if pct_1d <= 4.5 or ltp < 0.88 * high_52w or not symbol:
         continue
 
     info = {}
@@ -173,7 +100,6 @@ for row in raw_rows:
             "ROA %": round(roa_pct, 2),
             "D/E": round(de_ratio, 2),
             "Vol / 1W Avg": f"{round(vol_ratio, 2)}x",
-            "FV": 10,
         })
     time.sleep(0.15)
 
@@ -189,4 +115,4 @@ with open("latest_bse_52w_high.md", "w", encoding="utf-8") as f:
     if all_52w_summary:
         f.write(pd.DataFrame(all_52w_summary).to_markdown(index=False) + "\n")
     else:
-        f.write("_No rows returned during weekend closure._\n")
+        f.write("_No rows returned (upstream API block)._\n")
