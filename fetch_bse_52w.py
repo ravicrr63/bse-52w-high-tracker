@@ -16,7 +16,7 @@ try:
     session.get("https://bseindia.com", timeout=15)
     resp = session.get(
         "https://bseindia.com",
-        headers={"Referer": "https://bseindia.com", "Origin": "https://bseindia.com"},
+        headers={"Referer": "https://www.bseindia.com/", "Origin": "https://www.bseindia.com"},
         timeout=20,
     )
     if resp.status_code == 200 and resp.text.lstrip().startswith("{"):
@@ -24,7 +24,7 @@ try:
 except Exception as e:
     print(f"BSE warning: {e}")
 
-# 2. Fallback: Authenticated yfinance EquityQuery screener (works 24/7 including holidays)
+# 2. Fallback: Authenticated yfinance EquityQuery screener
 if not raw_rows:
     source_used = "Yahoo Finance India Near-52W High Screener"
     try:
@@ -35,7 +35,10 @@ if not raw_rows:
             yf.EquityQuery("gt", ["percentchange", 1.5]),
         ])
         res = yf.screen(q, sortField="percentchange", sortAsc=False, size=200)
-        for item in res.get("quotes", []):
+        quotes = res.get("quotes", [])
+        # Sort so primary .NS tickers are processed before .BO duplicates
+        quotes.sort(key=lambda x: (0 if str(x.get("symbol", "")).endswith(".NS") else 1))
+        for item in quotes:
             ltp = float(item.get("regularMarketPrice") or 0)
             high_52w = float(item.get("fiftyTwoWeekHigh") or 0)
             if ltp > 0 and high_52w > 0 and ltp >= 0.88 * high_52w:
@@ -51,23 +54,28 @@ if not raw_rows:
 
 qualified = []
 all_52w_summary = []
+seen_symbols = set()
 
 for row in raw_rows:
-    symbol = str(row.get("scrip_id") or "").strip()
+    symbol = str(row.get("scrip_id") or "").strip().upper()
+    if not symbol or symbol in seen_symbols:
+        continue
+    seen_symbols.add(symbol)
+
     name = str(row.get("scripname") or symbol).strip()
     ltp = float(row.get("ltradert") or 0)
     high_52w = float(row.get("New52WH") or ltp)
     pct_1d = float(row.get("change_percent") or 0)
 
     all_52w_summary.append({
-        "Symbol": symbol or name,
+        "Symbol": symbol,
         "Company": name,
         "LTP": round(ltp, 2),
         "52W_High": round(high_52w, 2),
         "1D_%": round(pct_1d, 2),
     })
 
-    if pct_1d <= 4.5 or ltp < 0.88 * high_52w or not symbol:
+    if pct_1d <= 4.5 or ltp < 0.88 * high_52w:
         continue
 
     info = {}
@@ -103,15 +111,19 @@ for row in raw_rows:
         })
     time.sleep(0.15)
 
+# Sort both tables cleanly by 1D % descending after deduplication
+qualified.sort(key=lambda x: x["1D %"], reverse=True)
+all_52w_summary.sort(key=lambda x: x["1D_%"], reverse=True)
+
 with open("latest_bse_52w_high.md", "w", encoding="utf-8") as f:
     f.write(f"# 52-Week High Feed ({source_used}) — Updated {now_ist}\n")
-    f.write(f"**Total Raw 52W Highs:** {len(raw_rows)} | **Filtered Tier-1 Candidates:** {len(qualified)}\n\n")
+    f.write(f"**Unique Near-52W Highs:** {len(all_52w_summary)} | **Filtered Tier-1 Candidates:** {len(qualified)}\n\n")
     f.write("## 1. Filtered High-Conviction Breakouts (9-Rule Filter Passed)\n")
     if qualified:
         f.write(pd.DataFrame(qualified).to_markdown(index=False) + "\n\n")
     else:
         f.write("_No stocks met all 9 strict criteria in this run._\n\n")
-    f.write("## 2. Full Untruncated Near-52-Week High List\n")
+    f.write("## 2. Full Untruncated Near-52-Week High List (Deduplicated)\n")
     if all_52w_summary:
         f.write(pd.DataFrame(all_52w_summary).to_markdown(index=False) + "\n")
     else:
