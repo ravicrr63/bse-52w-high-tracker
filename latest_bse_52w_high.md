@@ -1,4 +1,4 @@
-# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-25 16:48 IST
+# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-26 01:24 IST
 **Unique Near-52W Highs:** 31 | **Filtered Tier-1 Candidates:** 0
 
 ## 1. Filtered High-Conviction Breakouts (9-Rule Filter Passed)
@@ -7,7 +7,7 @@ _No stocks met all 9 strict criteria in this run._
 ## 2. Full Untruncated Near-52-Week High List (Deduplicated)
 | Symbol     | Company                        |     LTP |   52W_High |   1D_% |
 |:-----------|:-------------------------------|--------:|-----------:|-------:|
-| THOMASCOOK | THOMAS COOK (INDIA) LTD        |  149.6  |     155.21 |  15.62 |
+| THOMASCOOK | THOMAS COOK (INDIA) LTD        |  149.6  |     155    |  15.62 |
 | GREAVESCOT | GREAVES COTTON LTD.            |  309.44 |     315    |  14.98 |
 | ARIS       | ARISINFRA SOLUTIONS LTD        |  190.3  |     194.49 |  14.09 |
 | KOPRAN     | KOPRAN LTD                     |  289.52 |     303.49 |   9.11 |
