@@ -1,62 +1,40 @@
-# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-25 02:08 IST
-**Unique Near-52W Highs:** 46 | **Filtered Tier-1 Candidates:** 6
+# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-25 16:48 IST
+**Unique Near-52W Highs:** 31 | **Filtered Tier-1 Candidates:** 0
 
 ## 1. Filtered High-Conviction Breakouts (9-Rule Filter Passed)
-| Symbol     | Company                        |   LTP (₹) |   52W High (₹) |   1D % |   MCap (₹ Cr) |   ROA % |   D/E | Vol / 1W Avg   |
-|:-----------|:-------------------------------|----------:|---------------:|-------:|--------------:|--------:|------:|:---------------|
-| SAMBHV     | SAMBHV STEEL TUBES LTD         |    176.9  |         179.8  |  11.92 |        5212.7 |    9.15 |  0.48 | 19.31x         |
-| SCPL       | SHEETAL COOL PRODUCTS LTD      |    707.8  |         749    |  11.38 |         743.2 |    8.47 |  0.57 | 13.12x         |
-| SPORTKING  | SPORTKING INDIA LIMITED        |    239.18 |         244.38 |   8.09 |        3044.1 |   11.71 |  0.43 | 3.56x          |
-| GOELCONS   | GOEL CONSTRUCTION COMPANY LIMI |    630    |         639    |   5.33 |         910.3 |   10.08 |  0.03 | 2.19x          |
-| MANAKSTEEL | Manaksia Steels Limited        |    127.85 |         131.7  |   4.97 |         794.6 |   12.63 |  0.36 | 2.53x          |
-| SUDEEPPHRM | SUDEEP PHARMA LIMITED          |   1250    |        1378    |   4.91 |       14118.6 |   12.6  |  0.19 | 1.69x          |
+_No stocks met all 9 strict criteria in this run._
 
 ## 2. Full Untruncated Near-52-Week High List (Deduplicated)
 | Symbol     | Company                        |     LTP |   52W_High |   1D_% |
 |:-----------|:-------------------------------|--------:|-----------:|-------:|
-| PERMAGN    | PERMANENT MAGNETS LTD.         | 1335.9  |    1354.5  |  18.35 |
-| HMAAGRO    | HMA AGRO INDUSTRIES LTD        |   40.03 |      40.69 |  18.05 |
-| SAMBHV     | SAMBHV STEEL TUBES LTD         |  176.9  |     179.8  |  11.92 |
-| SCPL       | SHEETAL COOL PRODUCTS LTD      |  707.8  |     749    |  11.38 |
-| WINDMACHIN | WINDSOR MACHINES LIMITED       |  354.7  |     375.95 |  10.43 |
-| AERPACE    | Aerpace Industries Limited     |   84.07 |      84.18 |   9.85 |
-| COMSYN     | COMMERCIAL SYN BAGS LTD        |  282.51 |     315.4  |   9.72 |
-| RATNAVEER  | RATNAVEER PRECISION ENG L      |  403.3  |     406.8  |   8.93 |
-| SPORTKING  | SPORTKING INDIA LIMITED        |  239.18 |     244.38 |   8.09 |
-| HMVL       | HINDUSTAN MEDIA VENT LTD       |   95.39 |     108.16 |   7.54 |
-| SHALPAINTS | SHALIM PAINTS LTD              |  103.97 |     116.8  |   6.72 |
-| SMT        | SAHAJANAND MEDICAL TECH L      |  557.45 |     578.7  |   5.66 |
-| TECHNOCRAF | TECHNOCRAFT VENTURES LTD       |  519.1  |     568.3  |   5.47 |
-| GOELCONS   | GOEL CONSTRUCTION COMPANY LIMI |  630    |     639    |   5.33 |
-| MRUTR      | MRUGESH TRADING LTD.           |  121.41 |     121.41 |   5    |
-| ZELIO      | Zelio E Mobility Limited       | 1415.75 |    1415.75 |   5    |
-| SOBME      | SOBHAGYA MERCHANTILE LTD.      | 1937.1  |    1937.1  |   5    |
-| SCAGRO     | SC Agrotech Limited            |   83.54 |      83.54 |   4.99 |
-| MANAKSTEEL | Manaksia Steels Limited        |  127.85 |     131.7  |   4.97 |
-| PERVASIVE  | Pervasive Commodities Limited  |   18.82 |      18.82 |   4.96 |
-| SUDEEPPHRM | SUDEEP PHARMA LIMITED          | 1250    |    1378    |   4.91 |
-| CHALET     | Chalet Hotels Limited          |  863.6  |     939.75 |   4.79 |
-| SUNSHINE   | SUNSHINE PICTURES LIMITED      |  536.5  |     541.85 |   4.7  |
-| NELCAST    | NELCAST LIMITED                |  153.02 |     173.2  |   4.59 |
-| VPAL       | Vegorama Punjabi Angithi Limit |  310    |     320    |   4.39 |
-| KNAGRI     | KN AGRI RESOURCES LIMITED      |  227.09 |     233.9  |   4.33 |
-| AKCAPIT    | A K CAPITAL SERVICES LTD.      | 2085.4  |    2110.8  |   4.1  |
-| COSPOWER   | Cospower Engineering Limited   | 3490    |    3520.95 |   4.07 |
-| MARSONS    | MARSONS LIMITED                |  158.69 |     175.4  |   4.02 |
-| STEL       | STEL HOLDINGS LIMITED          |  640.85 |     699.9  |   4    |
-| BLISSGVS   | BLISS GVS PHARMA LTD           |  665.25 |     739.9  |   3.86 |
-| GFLLIMITED | GFL LIMITED                    |   62.14 |      63.99 |   3.53 |
-| HINDOILEXP | HINDUSTAN OIL EXPLORATION      |  224.03 |     238.89 |   3.33 |
-| SANGAMIND  | SANGAM (INDIA) LTD             |  696.1  |     713    |   3.32 |
-| KNACK      | KNACK PACKAGING LIMITED        |  206.26 |     222    |   3.32 |
-| GRAPHITE   | GRAPHITE INDIA LTD             |  789.9  |     874.35 |   3.18 |
-| BONFIG     | BONFIGLIOLI TRANS LIMITED      |  825.5  |     871.75 |   3.07 |
-| PGIL       | PEARL GLOBAL IND LIMITED       | 1479.4  |    1535    |   3.06 |
-| AARTIPHARM | AARTI PHARMALABS LIMITED       | 1020.65 |    1047.25 |   3.02 |
-| TANLA      | TANLA PLATFORMS LIMITED        |  680.5  |     738.95 |   3.01 |
-| GNRL       | GUJARAT NATURAL RES L          |   12.34 |      13.28 |   3.01 |
-| SEALMATIC  | Sealmatic India Limited        |  479.8  |     514.95 |   2.99 |
-| PVRINOX    | PVR INOX LIMITED               | 1699.7  |    1747    |   2.87 |
-| BAFNAPH    | BAFNA PHARMACEUTICALS LTD      |  483.1  |     501.65 |   2.8  |
-| HONASA     | HONASA CONSUMER LIMITED        |  539.75 |     543    |   2.73 |
-| AJAXENGG   | AJAX ENGINEERING LIMITED       |  622.25 |     643.65 |   2.61 |
+| THOMASCOOK | THOMAS COOK (INDIA) LTD        |  149.6  |     155.21 |  15.62 |
+| GREAVESCOT | GREAVES COTTON LTD.            |  309.44 |     315    |  14.98 |
+| ARIS       | ARISINFRA SOLUTIONS LTD        |  190.3  |     194.49 |  14.09 |
+| KOPRAN     | KOPRAN LTD                     |  289.52 |     303.49 |   9.11 |
+| HMAAGRO    | HMA AGRO INDUSTRIES LTD        |   43.35 |      44.03 |   8.29 |
+| STEAMHOUSE | Steamhouse India Limited       |  169.15 |     170.8  |   7.23 |
+| AMANTA     | AMANTA HEALTHCARE LIMITED      |  218.4  |     245.7  |   6.55 |
+| PURPLEFIN  | Purple Finance Limited         |   69.47 |      78.5  |   6.47 |
+| HALDYNGL   | HALDYN GLASS LTD.              |  150.26 |     166    |   6.45 |
+| IFINSEC    | INDIA FINSEC LTD.              |  264.95 |     298.8  |   6    |
+| PPEL       | POOJAA PRECISION ENGG. LIMITED |  950.75 |    1066.4  |   5.54 |
+| BAFNAPH    | BAFNA PHARMACEUTICALS LTD      |  507.25 |     507.25 |   5    |
+| MRUTR      | MRUGESH TRADING LTD.           |  127.48 |     127.48 |   5    |
+| PERVASIVE  | Pervasive Commodities Limited  |   19.76 |      19.76 |   4.99 |
+| SCAGRO     | SC Agrotech Limited            |   87.71 |      87.71 |   4.99 |
+| EIMCOELECO | EIMCO ELECON (INDIA) LTD       | 2527.4  |    2740    |   4.94 |
+| AERPACE    | Aerpace Industries Limited     |   88.11 |      90    |   4.81 |
+| AGARWALEYE | DR AGARWALS HEALTH CARE L      |  576.2  |     580.05 |   4.65 |
+| HMVL       | HINDUSTAN MEDIA VENT LTD       |   99.79 |     108.16 |   4.61 |
+| GLOBAL     | GLOBAL EDUCATION LIMITED       |  145.25 |     151.09 |   4.01 |
+| YOGI       | YOGI LTD.                      |  166.94 |     180    |   3.69 |
+| FILATEX    | FILATEX INDIA LTD              |  111.88 |     119.78 |   3.58 |
+| VIJAYA     | VIJAYA DIAGNOSTIC CEN LTD      | 1627.7  |    1659.2  |   3.5  |
+| SHALPAINTS | SHALIM PAINTS LTD              |  107.61 |     116.8  |   3.5  |
+| JLHL       | JUPITER LIFE LINE HOSP L       |  307.75 |     340    |   3.46 |
+| SWARAJ     | SWARAJ SUITING LIMITED         |  360.6  |     395    |   3.35 |
+| KNAGRI     | KN AGRI RESOURCES LIMITED      |  234.39 |     237    |   3.21 |
+| MANOMAY    | MANOMAY TEX INDIA LTD          |  281.14 |     282    |   3.17 |
+| NPST       | NETWORK PEOPLE SRV TECH L      | 1751    |    1934    |   3.08 |
+| SIMPLEXINF | SIMPLEX INFRASTRUCTURES L      |  295.4  |     308.6  |   3.07 |
+| MAXESTATES | Max Estates Limited            |  614.75 |     653.6  |   3.06 |
