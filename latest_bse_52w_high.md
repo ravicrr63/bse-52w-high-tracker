@@ -1,4 +1,4 @@
-# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-26 19:36 IST
+# 52-Week High Feed (Yahoo Finance India Near-52W High Screener) — Updated 2026-11-27 01:05 IST
 **Unique Near-52W Highs:** 28 | **Filtered Tier-1 Candidates:** 4
 
 ## 1. Filtered High-Conviction Breakouts (9-Rule Filter Passed)
